@@ -1,5 +1,3 @@
-# Project 0
+# Project 1
 
-Web Programming with Python and JavaScript
-
-This website has 4 pages: Index, Mission, Info and Contact.
+This project is made for the Harvard C50's Web Programming with Python and JavaScript course from edx.org
