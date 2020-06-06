@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block head %}
+
+{% endblock %}
+
+
+
+{% block title %}
+    Book Review- Sign-in
+   
+{% endblock %}
+
+{% block body %}
+
+
+<div class="login-page">
+    <div class="form">
+      
+      <form action="{{ url_for('home') }}" method="POST" class="login-form">
+        <input type="text" placeholder="username" name="username"/>
+        <input type="password" placeholder="password" name="password"/>
+        <p style="color: red;">{{message}}</p>
+        <button>login</button>
+        
+        <p class="message">Not registered? <a href="{{url_for('signup')}}">Create an account</a></p>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
