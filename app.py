@@ -8,10 +8,7 @@ import requests
 
 
 app = Flask(__name__)
-#bcrypt = Bcrypt(app)
-# Check for environment variable
-#if not os.getenv("DATABASE_URL"):
-#   raise RuntimeError("DATABASE_URL is not set")
+
 
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
@@ -21,10 +18,10 @@ KEY="6iGmZfPMsrgbm0i8iqfcw"
 
 
 # Set up database (uncomment below before push)
-engine = create_engine(os.getenv("DATABASE_URL"))
+#engine = create_engine(os.getenv("DATABASE_URL"))
 
 #comment this before push
-#engine=create_engine("postgres://jnoduqbfiixzzy:ccebcac2fe368de60b334a55d85f918e766d20818656f11df6322047c6c0b573@ec2-176-34-97-213.eu-west-1.compute.amazonaws.com:5432/dd93u7kgi58km7")
+engine=create_engine("postgres://jnoduqbfiixzzy:ccebcac2fe368de60b334a55d85f918e766d20818656f11df6322047c6c0b573@ec2-176-34-97-213.eu-west-1.compute.amazonaws.com:5432/dd93u7kgi58km7")
 db = scoped_session(sessionmaker(bind=engine))
 
 
@@ -54,7 +51,6 @@ def register():
 
     isUserUnique=db.execute("SELECT * FROM users WHERE username=:username",{"username":username}).rowcount
     if isUserUnique==0:
-        #passhash = bcrypt.generate_password_hash(password).decode(‘utf-8’)
         db.execute("INSERT INTO users (username,passhash) values(:username,:passhash)",{'username':username,'passhash':password})
         db.commit()
         return render_template("registered.html")
@@ -64,9 +60,7 @@ def register():
 
 @app.route("/home",methods=["POST","GET"])
 def home():
-   # if session["id"]==None:
-   #     return render_template("index.html",message="noob!!<br> login to access")
-    if(request.method=="GET"):
+    if(request.method=="GET" and 'id' in session):
         return render_template("home.html",username=session["username"])
     try:
         username = request.form.get("username")
@@ -85,23 +79,20 @@ def home():
 
 @app.route("/title")
 def title():
-  #  if session["id"]==None:
-   #     return render_template("index.html",message="noob!!<br> login to access")
-
-    return render_template("search.html",username=session["username"],name="title",next="title_search")
+    if 'id' in session:
+        return render_template("search.html",username=session["username"],name="title",next="title_search")
+    return render_template("index.html",message="Login to access")
     
 @app.route("/isbn")
 def isbn():
-  #  if session["id"]!=None:
-  #      return render_template("search.html",username=session["username"],name="isbn",next="isbn_search")
-  #  else:
-    return render_template("index.html",message="noob!!<br> login to access")
+    if 'id' in session:
+        return render_template("search.html",username=session["username"],name="isbn",next="isbn_search")
+    return render_template("index.html",message="Login to access")
 @app.route("/author")
 def author():
-  #  if session["id"]!=None:
-    return render_template("search.html",username=session["username"],name="author",next="author_search")
- #   else:
-   #     return render_template("index.html",message="noob!!<br> login to access")
+    if 'id' in session:
+        return render_template("search.html",username=session["username"],name="author",next="author_search")
+    return render_template("index.html",message="Login to access")
 
 
 
