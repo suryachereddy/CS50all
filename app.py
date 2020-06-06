@@ -18,10 +18,10 @@ KEY="6iGmZfPMsrgbm0i8iqfcw"
 
 
 # Set up database (uncomment below before push)
-engine = create_engine(os.getenv("DATABASE_URL"))
+#engine = create_engine(os.getenv("DATABASE_URL"))
 
 #comment this before push
-#engine=create_engine("postgres://jnoduqbfiixzzy:ccebcac2fe368de60b334a55d85f918e766d20818656f11df6322047c6c0b573@ec2-176-34-97-213.eu-west-1.compute.amazonaws.com:5432/dd93u7kgi58km7")
+engine=create_engine("postgres://jnoduqbfiixzzy:ccebcac2fe368de60b334a55d85f918e766d20818656f11df6322047c6c0b573@ec2-176-34-97-213.eu-west-1.compute.amazonaws.com:5432/dd93u7kgi58km7")
 db = scoped_session(sessionmaker(bind=engine))
 
 
@@ -169,7 +169,7 @@ def api_out(isbn):
     isbn=str(isbn)
     book=db.execute("SELECT * FROM books WHERE isbn=:isbn",{"isbn":isbn}).fetchone()
     if book is None:
-        return jsonify({"error":"Invalid ISBN"}),422
+        return jsonify({"error":"Invalid ISBN"}),404
 
     return jsonify({
         "title":book[2],
