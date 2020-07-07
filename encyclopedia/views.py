@@ -24,10 +24,10 @@ def newpage(request):
         content=request.POST.get("content")
         if title==None:
             return render(request,"encyclopedia/newpage.html", {"error":"Title can't be blank"})
-        if title.lower() in util.list_entries():
-            return render(request,"encyclopedia/newpage.html", {"error":title+ "already exists!"})
-        
-        util.save_entry(title, content)
+        if title in util.list_entries():
+            return render(request,"encyclopedia/newpage.html", {"error":title+ " already exists!"})
+        else:
+            util.save_entry(title, content)
         return redirect('wikipage',title=title)
             
     return render(request,"encyclopedia/newpage.html")
