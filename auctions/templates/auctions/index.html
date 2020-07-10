@@ -2,6 +2,16 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    {% for auction in auctions %}
+    <div class="card" style="width: 30%;">
+        <img class="card-img-top" src="https://image.shutterstock.com/image-photo/colorful-flower-on-dark-tropical-260nw-721703848.jpg" alt="Card image cap">
+        <div class="card-body">
+            <h2 style="text-align: center;">TITLE</h2>
+            <p><span style="font-weight: bold;">Price:</span> $300</p>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+    </div>
+    {% empty %}
+    <p>No active auctions.</p>
+    {% endfor %}
 {% endblock %}
