@@ -88,6 +88,25 @@ def auctionpage(request,title):
         user=User.objects.get(id=uid)
         comment=Comments(user=user,Auction=auction,comment=comment)
         comment.save()
+        comments=Comments.objects.filter(Auction=auction).all()
         return render(request,"auctions/auction.html",{
-            "auction":auction
+            "auction":auction,
+            "comments":comments
         })
+
+def bid(request):
+    if request.method=="POST":
+        bid,uid,title=request.POST["bid"],request.POST["uid"],request.POST["title"]
+        auction=Auction.objects.get(id=int(title))
+        if(auction.currentBid>float(bid)):
+            comments=Comments.objects.filter(Auction=auction).all()
+            return render(request,"auctions/auction.html",{
+                "error":"Your bid is lower than the current bid.",
+                "auction":auction,
+                "comments":comments
+            })
+        else:
+            auction.currentBid=bid
+            auction.latestbid=uid
+            auction.save()
+            return HttpResponseRedirect(reverse("auctionpage",kwargs={'title':title}))
