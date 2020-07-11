@@ -1,17 +1,20 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    {% for auction in auctions %}
-    <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="https://image.shutterstock.com/image-photo/colorful-flower-on-dark-tropical-260nw-721703848.jpg" alt="Card image cap">
+<h2>Active Listings</h2>
+{% for auction in auctions %}
+
+<div class="card" style="width: 30%;margin-left: 35%;margin-bottom: 3em; background-color: burlywood;">
+    <a href="{% url 'auctionpage' title=auction.id %}"><img class="card-img-top img-fluid" style="width: 30;" src="{{auction.image}}" alt="Card image cap"></a>
         <div class="card-body">
-            <h2 style="text-align: center;">TITLE</h2>
-            <p><span style="font-weight: bold;">Price:</span> $300</p>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <h2 style="text-align: center;">{{auction.title}}</h2>
+            <p><span style="font-weight: bold;">Current Price:</span> ${{auction.currentBid}}</p>
+            <p class="card-text">{{auction.des}}</p>
+            <p><span style="font-weight: bold;">Created on:</span> {{auction.date}}</p>    
         </div>
-    </div>
-    {% empty %}
-    <p>No active auctions.</p>
-    {% endfor %}
+</div>
+
+{% empty %}
+<p>No active auctions.</p>
+{% endfor %}
 {% endblock %}

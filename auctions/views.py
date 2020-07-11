@@ -8,7 +8,9 @@ from .models import User,Auction,Comments
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html",{
+        "auctions":Auction.objects.all()
+    })
 
 
 def login_view(request):
@@ -66,5 +68,26 @@ def createlist(request):
     if request.method=="GET":
         return render(request, "auctions/createlist.html")
     else:
-        title,StartingBid,des,image,category=request.POST["title"],request.POST["StartingBid"],request.POST["des"],request.POST["image"],request.POST["category"]
-        auction=Auction(title=title,StartingBid=float(StartingBid),des=des,image=image,category=category,listedby=
+        title,StartingBid,des,image,category,uid=request.POST["title"],request.POST["StartingBid"],request.POST["des"],request.POST["image"],request.POST["category"],request.POST["uid"]
+        user=User.objects.get(id=uid)
+        auction=Auction(title=title,startingBid=float(StartingBid),des=des,image=image,category=category,listedby=user,currentBid=float(StartingBid))
+        auction.save()
+        return HttpResponseRedirect(reverse("index"))
+
+def auctionpage(request,title):
+    if request.method=="GET":
+        auction=Auction.objects.get(id=int(title))
+        comments=Comments.objects.filter(Auction=auction).all()
+        return render(request,"auctions/auction.html",{
+            "auction":auction,
+            "comments":comments
+        })
+    else:
+        comment,uid=request.POST["comment"],request.POST["uid"]
+        auction=Auction.objects.get(id=int(title))
+        user=User.objects.get(id=uid)
+        comment=Comments(user=user,Auction=auction,comment=comment)
+        comment.save()
+        return render(request,"auctions/auction.html",{
+            "auction":auction
+        })
