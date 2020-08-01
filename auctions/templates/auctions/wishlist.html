@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2>My Wishlist</h2>
+{% for wish in wishes %}
+
+
+<div class="card" style="width: 30%;margin-left: 35%;margin-bottom: 3em; background-color: burlywood;">
+    <a href="{% url 'auctionpage' title=wish.auction.id %}"><img class="card-img-top img-fluid" style="width: 30;" src="{{wish.auction.image}}" alt="Card image cap"></a>
+        <div class="card-body">
+            <h2 style="text-align: center;">{{wish.auction.title}}</h2>
+            <p><span style="font-weight: bold;">Starting Price:</span> ${{wish.auction.startingBid}}</p>
+            {% if wish.auction.currentBid %}  
+            <p><span style="font-weight: bold;">Current Price:</span> ${{wish.auction.currentBid}}</p>
+            {% else %}
+            <p><span style="font-weight: bold;">Current Price:</span> No bids yet.</p>
+            {%endif%}
+            <p class="card-text"><span style="font-weight: bold;">Description: </span> {{wish.auction.des}}</p>
+            <p><span style="font-weight: bold;">Created on:</span> {{wish.auction.date}}</p>    
+        </div>
+</div>
+{% empty %}
+<p>No active wishes.</p>
+{% endfor %}
+{% endblock %}
