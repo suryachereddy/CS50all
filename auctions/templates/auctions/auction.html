@@ -7,19 +7,68 @@
         <div class="card-body">
             <h2>{{auction.title}}</h2>
             <p><span style="font-weight: bold;">Initial Price:</span> ${{auction.startingBid}}</p>
-            <p><span style="font-weight: bold;">Current Price:</span> ${{auction.currentBid}}</p>
+             
+            <p><span style="font-weight: bold;">Current Price:</span> {%if auction.currentBid %}${{auction.currentBid}} by user: {{auction.currentbiduser}} {%else%} No bids yet. {%endif %}</p>
             
             <p class="card-text"><span style="font-weight: bold;">Description:</span> {{auction.des}}</p>
+            <p><span style="font-weight: bold;">Listed By:</span> {{auction.listedby}}</p>
         </div>
+        {%if user.is_authenticated%}
+            {%if auction.currentBid %}
+            {%if user.id is auction.listedby.id%}
+                {%if auction.biddingclose is 0%}
+                <p><a href="{% url 'closebid' title=auction.id%}">Close Bidding!</a></p>
+                {%else%}
+                <p>You have closed the auction</p>
+                {%endif%}
+            {%endif%} 
+            {%endif%}        
+        {%endif%} 
+        {%if not auction.currentBid %}
+            {%if user.id is auction.listedby.id%}
+            <p>You can't close the bidding since you don't have any bids.</p>
+            {%endif%} 
+            {%endif%} 
+
+        {%if auction.biddingclose is 0%}   
+        {%if user.is_authenticated%}
+        {%if user.id is not auction.listedby.id%}
         <h3>Bid Now!:</h3> 
         <form action="{% url 'bid'%}" method="POST">
             {% csrf_token %}
             <input type="hidden" value="{{auction.id}}" name="title">
             <input type="hidden" value="{{user.id}}" name="uid">
+           
+            {%if auction.currentBid %}
             <input type="number" step="0.01" name="bid" min={{auction.currentBid}}>
+            {%else%}
+            <input type="number" step="0.01" name="bid" min={{auction.startingBid}}>
+            {%endif%}
             <input type="submit">
         </form>
-        
+        {%else%}
+        <p style="color: brown;">THIS IS YOUR BID!</p>
+        {%endif%}
+
+        {% if error %}
+        <p style="color: crimson;">Error: {{error}}</p>
+          
+        {% endif %}
+ 
+{%if wish is 1%}
+<a href="{%url 'removewish' auction=auction.id%}">Remove from your wishlist</a>
+{% else %}
+<a href="{%url 'addwishlist' auction=auction.id%}">Add to Wish-list!</a>
+{%endif%}
+{%endif%}
+{%endif%}
+{%if auction.biddingclose is 1%}  
+<h3 style="color: brown;">This listing is CLOSED.</h3>
+{%if user.id is auction.currentbiduser.id%}
+<h1>Congo! {{auction.currentbiduser}} you won the the bidding!</h1>
+{%endif%}
+{%endif%}
+
 <h3>Comments:</h3>
 <ol>
 {% for comment in comments %}
@@ -27,9 +76,10 @@
 <P>{{comment.comment}}</P>
 </li>
 {% empty %}
-<p style="font-weight: bold;">Be the first to comment!</p>
+<p style="font-weight: bold;">No comments!</p>
 {% endfor %}
 </ol>
+{% if user.is_authenticated %}
 <h4>Add comment:</h4>
 <form action="{% url 'auctionpage' title=auction.id %}" method="POST">
     {% csrf_token %}
@@ -39,5 +89,7 @@
 </div>
 <input type="submit" class="btn btn-primary">
 </form>
+
+{% endif %}
 
 {% endblock %}

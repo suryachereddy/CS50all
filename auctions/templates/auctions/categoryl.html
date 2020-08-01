@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h2>Active Listings</h2>
+<h2>{{cat}}</h2>
 {% for auction in auctions %}
 
 <div class="card" style="width: 30%;margin-left: 35%;margin-bottom: 3em; background-color: burlywood;">
@@ -20,6 +20,7 @@
 </div>
 
 {% empty %}
-<p>No active auctions.</p>
+<p>No active auctions in <span style="font-weight: bold;">{{cat}}</span> category.</p>
 {% endfor %}
 {% endblock %}
+
