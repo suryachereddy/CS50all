@@ -1,4 +1,5 @@
 import csv
+from os import stat
 import sys
 
 from util import Node, StackFrontier, QueueFrontier
@@ -19,7 +20,9 @@ def load_data(directory):
     """
     # Load people
     with open(
-        "G:/OneDrive/OneDrive/projects/CS50 AI/0/degrees/"+
+        
+        #"G:/OneDrive/OneDrive/projects/suryachereddy/"+
+        "C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
         f"{directory}/people.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -35,7 +38,8 @@ def load_data(directory):
 
     # Load movies
     with open(
-        "G:/OneDrive/OneDrive/projects/CS50 AI/0/degrees/"+
+        #"G:/OneDrive/OneDrive/projects/suryachereddy/"+
+        "C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
         f"{directory}/movies.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -47,7 +51,8 @@ def load_data(directory):
 
     # Load stars
     with open(
-        "G:/OneDrive/OneDrive/projects/CS50 AI/0/degrees/"+
+        #"G:/OneDrive/OneDrive/projects/suryachereddy/"+
+        "C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
         f"{directory}/stars.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -98,10 +103,35 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    
-    raise NotImplementedError
+    node=Node(state=source,parent=None,action=None)
+    frontier=QueueFrontier()
+    frontier.add(node)
+    explored=set()
+    while True:
+        if frontier.empty():
+            return
+        node=frontier.remove()
 
+        if node.state==target:
+            actions=[]
+            
+            while node.parent is not None:
+                actions.append((node.action,node.state))
+    
+                node=node.parent
+            actions.reverse()
+               
+            return actions
+
+        explored.add(node.state)
+        for action, state in neighbors_for_person(node.state):
+            if not frontier.contains_state(state) and state not in explored:
+                child = Node(state=state, parent=node, action=action)
+                frontier.add(child)
+
+        
+
+    
 
 def person_id_for_name(name):
     """
