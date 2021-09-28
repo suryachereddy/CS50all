@@ -22,7 +22,7 @@ def load_data(directory):
     with open(
         
         #"G:/OneDrive/OneDrive/projects/suryachereddy/"+
-        "C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
+        #"C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
         f"{directory}/people.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -39,7 +39,7 @@ def load_data(directory):
     # Load movies
     with open(
         #"G:/OneDrive/OneDrive/projects/suryachereddy/"+
-        "C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
+        #"C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
         f"{directory}/movies.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -52,7 +52,7 @@ def load_data(directory):
     # Load stars
     with open(
         #"G:/OneDrive/OneDrive/projects/suryachereddy/"+
-        "C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
+        #"C:/Users/Chereddy/OneDrive/projects/suryachereddy/"+
         f"{directory}/stars.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
